@@ -1,1 +1,134 @@
-Report
+Team Vegas
+Jorge Hernandez/ Git: hern4ndezjorge
+Aidan Ragan/ Git: aragan_22
+Gabriel Bendix/ 
+Beat The House
+Final Project Group 165
+COP3530 - Fa24
+GitHub: https://github.com/aragan22/BeatTheHouse-
+VideoLink: https://www.youtube.com/watch?v=j_2c4UbDr9I
+Problem: What problem are we trying to solve? 
+We have developed an algorithm to optimize freeplay betting strategies in sports betting, focusing on maximizing returns from limited daily bets. Freeplay betting has become common among many different sportsbooks and sweepstakes.  It involves the “house” giving a small amount of money for users to bet with at different times. By creating this program, we are providing a safer alternative to traditional sports betting by mapping out the optimal path to maximizing the returns of the house dealt freeplay. 
+
+Motivation: Why is this a problem?
+Gambling is a dangerous hobby that often leads to people risking and losing large amounts of money. Freeplay betting provides a solution, allowing users to enjoy betting without using real money, in turn, reducing personal financial risk. 
+
+Features Implemented: 
+Success will be defined by maximizing profits through our algorithm while minimizing risk. The system should recommend bets based on real-time odds comparison, indicating where there is a value bet between sportsbooks.
+
+Description of Data sets used: 
+
+API:
+TheOddsApi
+Description Directly From Their Website:
+“Sports betting API covering odds from bookmakers around the world”
+
+
+Tools: Programming languages or any tools/frameworks we will be using
+Required Packages:
+os - Built-in Python module (no installation required).
+requests - For making API requests.
+pandas - For data manipulation and analysis.
+numpy - For numerical computations.
+datetime - Built-in Python module (no installation required).
+logging - Built-in Python module (no installation required).
+scikit-learn - For machine learning tasks.
+Includes TimeSeriesSplit, make_pipeline, OneHotEncoder, make_column_transformer, SimpleImputer, and LogisticRegression.
+thefuzz - For fuzzy string matching (e.g., team name standardization).
+python-dotenv - For loading environment variables from a .env file.
+sports-betting - A specialized package for soccer data and betting-related tasks.
+
+
+
+
+Distribution of Responsibility and Roles: Who is responsible for what? 
+Jorge: API integration, data collection.
+Aidan: Algorithm development and testing.
+Gabriel: Data analysis and UI.
+Data Structures:
+
+In this code, the following Data Structures and Algorithms are:
+
+Maps (Dictionaries)
+Used for efficient key-value lookups. Examples: params (API query parameters), league_mapping (soccer league-to-country mapping), team_mapping (standardized-to-original team names).
+DataFrames (Tabular Data)
+Store and manipulate structured data. Examples: X_fix (fixture data), O_fix (odds data with hierarchical indexing), X_train/Y_train (training data and predictions).
+Lists
+Sequential data collection and iteration. Examples: odds_records (pre-DataFrame odds data), unique_games/top_bets (games and bets tracking), years (historical data).
+Graphs (Conceptual)
+Model relationships and dependencies. Example: team_mapping as nodes (teams) connected by edges (mappings).
+Tuples
+Immutable composite keys for unique indexing. Example: (date, home_team, away_team) as a key in O_fix and X_fix.
+Sets (Conceptual)
+Ensure uniqueness and remove duplicates. Example: unique_games in recommend_bets_based_on_current_odds.
+Hash Tables
+Fast lookups via Python dictionaries. Examples: league_mapping, team_mapping, and params.
+Trees (Conceptual)
+Represent hierarchical data. Structure: Parent (sport, e.g., Soccer), children (leagues, e.g., EPL), leaves (teams, e.g., Manchester United).
+ML Pipelines (Composite Structure)
+Structured sequence for preprocessing and model training. Components: make_column_transformer (feature mapping), SimpleImputer (missing data), LogisticRegression (model).
+Matrices and Tensors
+Efficient numerical computation. Examples: Sparse matrices from OneHotEncoder, matrix calculations in predict_proba and odds-related operations.
+Priority-Based Structures
+Decision-making via ranking. Example: recommend_bets_based_on_model filters and ranks bets by prediction-implied probability differences.
+Summary List of Data Structures:
+Maps (Dictionaries): params, league_mapping, team_mapping.
+DataFrames (2D Matrices): X_fix, O_fix, X_train, Y_train, etc.
+Lists: odds_records, years, unique_games, etc.
+Tuples: (date, home_team, away_team) composite keys.
+Graphs (Conceptual): Team-league relationships.
+Sets (Conceptual): unique_games.
+Hash Tables: Backing structure of dictionaries.
+Trees (Conceptual): Sport-league-team hierarchy.
+ML Pipelines: Scikit-learn pipelines for feature engineering and modeling.
+Matrices and Tensors: Sparse matrices for encoding; dense matrices for computations.
+Priority-Based Structures: Filtering and ranking bets.
+These structures are crucial for organizing, transforming, and analyzing betting data while leveraging ML techniques.
+
+Big(O) Worst Case Time Complexity:
+
+The time complexity of the recommend_bets_based_on_current_odds function is determined by analyzing each step of the function:
+Reset Index (O_flat = O_fix.reset_index()):
+Resetting the index of a Pandas DataFrame involves copying the index to columns and creating a new index.
+Complexity: O(n)O(n)O(n), where nnn is the number of rows in O_fix.
+Melting (O_melted = O_flat.melt(...)):
+Melting a DataFrame re-structures it from wide to long format.
+Complexity: O(n⋅k)O(n k)O(n⋅k), where kkk is the number of variables being melted.
+Drop NaN (O_melted.dropna(...)):
+Drops rows containing NaN values in the specified columns.
+Complexity: O(n)O(n)O(n).
+Sorting (O_sorted = O_melted.sort_values(...)):
+Sorting the DataFrame by a specific column.
+Complexity: O(nlog⁡n)O(n \log n)O(nlogn).
+Iterating Through Rows:
+Iterates through the sorted rows to select unique games and build the top_bets list.
+Complexity: O(n)O(n)O(n), as it processes each row once.
+Summing Odds (total_odds = top_bets_df['odds'].sum()):
+Sums the odds column in the resulting DataFrame.
+Complexity: O(b)O(b)O(b), where bbb is the number of bets in top_bets.
+Calculating Stake Proportions:
+Updates the stake column by dividing each row's odds by the total odds.
+Complexity: O(b)O(b)O(b).
+Overall Time Complexity:
+Combining the above steps, the dominant factors are melting (O(n⋅k)O(n k)O(n⋅k)) and sorting (O(nlog⁡n)O(n \log n)O(nlogn)). Thus, the overall time complexity is:
+O(n⋅k+nlog⁡n)O(n k + n log n)O(n⋅k+nlogn)
+Where nnn is the number of rows in O_fix and kkk is the number of variables being melted.
+
+Analysis & Reflection:
+In the initial brainstorm for this project, our group wanted to utilize machine learning and train a logistic regression model with hundreds and thousands of data points with historical data. The idea was to use historical odds data and map them to the actual results of the games in order to have the model build patterns that can be useful for our prediction algorithm. 
+ While we got far along in the process, we ran into a few roadblocks that caused us to have to drop this functionality near the end of production. Our team was able to build the model and have it meaningfully trained independent of the current odds by using only historical figures from our Sports-Betting specialized python package. However, as we tried converting this data to align with the formatting of our current odds data from The Odds API, we were unable to get the data to align correctly from the two sources.
+Thus, late into development we had to abandon the functionality for machine learning and had to rethink how we could still provide a value-add to our users. We were able to pivot and keep the identity of Beat The House alive by providing value-bet opportunities to the program, while keeping the identity of having the project be a risk-free alternative to wagering real money.
+In the early stages of development, the model was planned around developing free-play strategies sportsbook by sportsbook, one at a time, to gather data about how each individual book distributed free money to its users and at one price point . This data would tell us the amount money is dispersed to each user, how frequently money is dispersed, and the lowest price point (typically around $50-$100) that each user is allowed to withdraw their money at for each sportsbook. The whole philosophy behind many of these sportsbooks is to get you hooked off of gambling with a singular dollar, knowing that it is highly unlikely to gamble from the small balance to the cashout price point. From there, many users end up caving in and start gambling with real money, allowing the house to always win. The challenge for our team was still to circumvent the house from always winning; therefore, rather than doing one sportsbook at a time, we allowed the users to input their freeplay criteria in order to make the program universal for all sportsbooks. 
+In hindsight, if our group were to start over again we would likely manage our time better, as we bit off more than we could chew in regards to machine learning. This is still something that we plan on adding in the future to increase the accuracy of our model. We are looking forward to the continuation of the Beat The House project long after this Data Structures and Algorithms course, as we are motivated and learned a lot through the process. Gabriel learned that he had an astute talent for frontend UI work that he did not know he had. Aidan learned that training a machine learning model is not nearly as simple as it seems to be on Youtube. Jorge learned that much of development involves collaboration both through backend and frontend development and that api integration is much simpler than expected. All in all, collaborating on this project was fruitful for all members involved and we are glad to have had the opportunity to fight towards a future in which the house does not always win.
+
+References:
+
+The Odds API
+The Odds API. Accessed 4 Dec. 2024, https://the-odds-api.com/.
+
+Sports Betting Python Library
+"Sports Betting." PyPI, Python Package Index, Accessed 4 Dec. 2024, https://pypi.org/project/sports-betting/.
+
+Investopedia Betting Odds Article
+Staff, Investopedia. "Understanding the Math Behind Betting Odds and Gambling." Investopedia, Accessed 4 Dec. 2024, https://www.investopedia.com/articles/dictionary/042215/understand-math-behind-betting-odds-gambling.asp.
+

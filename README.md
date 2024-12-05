@@ -22,6 +22,11 @@ Beat The House is a sports betting recommendation app that leverages real-time d
    ```bash
    streamlit run src/BeatTheHouse.py
    ```
+4. In the app click Get Started:
+   You can now enter a sport, league, bet amount, and number of bets
+
+6. Click Get Betting Recommendations:
+   You will now see betting recommendations based on current odds
 
 ## Authors
 - Aidan Ragan
